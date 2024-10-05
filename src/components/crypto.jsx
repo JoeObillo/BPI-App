@@ -1,39 +1,48 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react"; // useState stores data | useEffect fetches data
+import axios from "axios"; // for https requests aka brunging data from the api
 
 function CryptoData() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null); // Add state for errors
+  const [data, setData] = useState(null); // prepares data
+  const [error, setError] = useState(null); // prepares errors
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://api.coindesk.com/v1/bpi/currentprice.json"
+          "https://api.coindesk.com/v1/bpi/currentprice.json" //getting the data from api
         );
-        setData(response.data);
+        setData(response.data); //data is returned
       } catch (error) {
         setError(error);
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error); //error is returned
       }
     };
 
     fetchData();
   }, []);
 
-  // Display data or error message conditionally
+  // returns the data
   return (
-    <div>
-      {error ? (
+    <div className="whole">
+      <div className="logo"></div>
+      <div className="wave"> </div>
+      <div className="wave"> </div>
+      <div className="wave"> </div>
+      {error ? ( //checks if error variable is true
         <p>Error fetching data: {error.message}</p>
-      ) : data ? (
+      ) : data ? ( //checks if data is true
         <div>
-          <p>Last Updated: {data.time.updated}</p>
+          <div className="header">
+            <h1 className="logo"> BITCOIN </h1>
+            <p className="time">
+              {" "}
+              <b>{data.time.updated}</b>
+            </p>
+          </div>
           <table class="bitcoin-table">
             <thead>
               <tr>
                 <th class="category">CURRENCY CODE</th>
-                <th class="category">SYMBOL</th>
                 <th class="category">RATE</th>
               </tr>
             </thead>
@@ -41,7 +50,6 @@ function CryptoData() {
               {Object.entries(data.bpi).map(([currencyCode, currencyData]) => (
                 <tr key={currencyCode}>
                   <td class="category">{currencyData.code}</td>
-                  <td class="category">{currencyData.symbol}</td>
                   <td class="category">{currencyData.rate}</td>
                 </tr>
               ))}
@@ -49,7 +57,7 @@ function CryptoData() {
           </table>
         </div>
       ) : (
-        <p>Loading...</p>
+        <div className="loading">...</div>
       )}
     </div>
   );
